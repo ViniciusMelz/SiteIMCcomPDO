@@ -1,0 +1,83 @@
+
+INSERT:
+NOME: mais velho
+SOBRENOME: de todos
+IDADE: 100
+PESO: 70
+ALTURA: 1.6
+QUERY: insert into pessoas (nome, sobrenome, idade, peso, altura) values ('mais velho','de todos',100,70,1.6)
+DATA E HORA: 16/04/2024 10:04
+
+UPDATE:
+DADOS ANTIGOS:
+ID ANTIGO: 41
+NOME ANTIGO: mais velho
+SOBRENOME ANTIGO: de todos
+IDADE ANTIGO: 100
+PESO ANTIGO: 70.00
+ALTURA ANTIGO: 1.60
+DADOS ATUALIZADOS:
+ID: 41
+NOME: mais velhooooooooooooooooooooooooooooooooooooooooooooo
+SOBRENOME: de todossssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+IDADE: 100
+PESO: 70
+ALTURA: 1.6
+QUERY: update pessoas set nome='mais velhooooooooooooooooooooooooooooooooooooooooooooo', sobrenome='de todossssssssssssssssssssssssssssssssssssssssssssssssssssssssss', idade=100, peso=70, altura=1.6 where id_pessoa=41
+DATA E HORA: 16/04/2024 10:05
+
+DELETE:
+ID: 41
+NOME: mais velhooooooooooooooooooooooooooooooooooooooooo
+SOBRENOME: de todosssssssssssssssssssssssssssssssssssssssssss
+IDADE: 100
+PESO: 70.00
+ALTURA: 1.60
+QUERY: delete from pessoas where id_pessoa=41
+DATA E HORA: 16/04/2024 10:06
+
+INSERT:
+NOME: Julia Helena
+SOBRENOME: Melz
+IDADE: 20
+PESO: 100
+ALTURA: 1
+QUERY: insert into pessoas (nome, sobrenome, idade, peso, altura) values ('Julia Helena','Melz',20,100,1)
+DATA E HORA: 27/05/2024 10:04
+
+INSERT:
+NOME: Patrick
+SOBRENOME: Suarez
+IDADE: 30
+PESO: 80
+ALTURA: 1.9
+QUERY: insert into pessoas (nome, sobrenome, idade, peso, altura) values ('Patrick','Suarez',30,80,1.9)
+DATA E HORA: 17/06/2024 15:05
+
+UPDATE:
+DADOS ANTIGOS:
+ID ANTIGO: 16
+NOME ANTIGO: Patrick
+SOBRENOME ANTIGO: Suarez
+IDADE ANTIGO: 30
+PESO ANTIGO: 80.00
+ALTURA ANTIGO: 1.90
+DADOS ATUALIZADOS:
+ID: 16
+NOME: Patrick
+SOBRENOME: Suarez
+IDADE: 31
+PESO: 79
+ALTURA: 1.91
+QUERY: update pessoas set nome='Patrick', sobrenome='Suarez', idade=31, peso=79, altura=1.91 where id_pessoa=16
+DATA E HORA: 17/06/2024 15:05
+
+DELETE:
+ID: 16
+NOME: Patrick
+SOBRENOME: Suarez
+IDADE: 31
+PESO: 79.00
+ALTURA: 1.91
+QUERY: delete from pessoas where id_pessoa=16
+DATA E HORA: 17/06/2024 15:05

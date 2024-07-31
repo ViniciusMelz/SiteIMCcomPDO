@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coleta de dados - OMS IFSul</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h4><img src="../assets/logoOMS.png" alt=""></h4>
+        <p id="subtexto">Formulário online - OMS IFsul</p>
+    </header>
+    <div class="wrapper-form">
+        <form class="form-dados" action="../php/processarForm.php" method="post">
+            <h1>Insira seus dados</h1>
+            <label>Nome:</label>
+            <input type="text" name="containerNome" required>
+            <label>Sobrenome:</label>
+            <input type="text" name="containerSobrenome" required>
+            <label>Idade:</label>
+            <input type="number" name="containerIdade" required>
+            <label>Peso:</label>
+            <input type="number" name="containerPeso" required>
+            <label>Altura:</label>
+            <input type="number" name="containerAltura" step="0.01" required>
+            <input type="submit" value="Salvar">
+        </form>
+    </div>
+    <footer>
+        <p>Créditos: Johnny Becker e Vinicius Melz - IFsul Venancio Aires - 2024</p>
+    </footer>
+</body>
+</html>

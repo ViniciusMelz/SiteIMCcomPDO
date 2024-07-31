@@ -1,0 +1,476 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    min-height: 100%;
+}
+
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #e5e5e5; 
+}
+
+.wrapper-tabela {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: max-content;
+    background-color: #e5e5e5;
+    padding: 13vh 0 13vh;
+}
+
+.wrapper-idade {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: max-content;
+    background-color: #e5e5e5;
+    padding: 5vh 0 13vh;
+}
+
+.wrapper-peso {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: max-content;
+    background-color: #e5e5e5;
+    padding: 13vh 0 13vh;
+}
+
+.container-peso {
+    display: grid;
+    grid-template-columns: 3fr 3fr 3fr; 
+    grid-template-rows: auto auto auto; 
+    grid-gap: 10px; 
+    font-size: 12px;
+    text-align: center;
+}
+
+.container-peso > .card-maior {
+    grid-column: 1 / span 3; 
+    grid-row: 1; 
+    width: 100%;
+}
+
+.container-peso > .card-tabela {
+    grid-column: 1 / span 3;
+    grid-row: 3;
+    width: 100%;
+}
+
+.container-peso > div {
+    height: 300px;
+    width: 400px; 
+    background-color: white;
+    border-radius: 5px;
+}
+
+.container-idade {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 1000px;
+}
+
+.rowIdadesExtremos {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1%;
+    height: max-content;
+    width: 80%;
+    margin-top: 20px;
+}
+
+.cardIdadesExtremos{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    background-color: white;
+    border-radius: 5px;
+    width: 49.5%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    height: max-content;
+    min-height: 310px;
+}
+
+.balaoTextoIdadesExtremos{
+    background-color: rgb(187, 187, 187);
+    border-radius: 10px;
+    width: 97%;
+    height: max-content;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+
+.row-1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 100px;
+}
+
+
+
+.card-1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
+    width: 500px;
+    padding: 5px;
+    
+}
+
+
+
+.row-4 {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.row-5 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 200px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.card-6, .card-7 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
+    width: 500px;
+    padding: 10px;
+    margin-top: 20px;
+    height: 100%;
+    font-size: 13px;
+}
+
+.card-5 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 20px;
+    height: 100px;
+}
+
+.tabela, th, td{
+    border-collapse: collapse;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid black;
+    margin-bottom: 50px;
+}
+
+.container-tabela {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    height: max-content;
+    background-color: white;
+    border-radius: 5px;
+    padding: 80px 80px 50px;
+}
+
+
+.wrapper-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #e5e5e5;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: 400px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.form-dados {
+    width: 100%;
+    max-width: 600px;
+    height: 450px;
+    background-color: white;
+    padding: 30px;
+    gap: 5px;
+    border-radius: 5px;
+}
+
+.form-dados label {
+    display: inline-block;
+    width: 15%;
+    margin-right: 10px;
+    margin-left: 15px;
+    margin-top: 20px;
+}
+
+.form-dados input[type="text"] {
+    width: 65%;
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border: 1px solid #dadada;
+    border-radius: 5px;
+}
+
+.form-dados input[type="number"] {
+    width: 65%;
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border: 1px solid #dadada;
+    border-radius: 5px;
+}
+
+.form-dados h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type=submit] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 70px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: rgba(0, 0, 0, 0.86);
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: black;
+    color: white;
+    height: 60px;
+}
+
+header {
+    background-color: black;
+    height: 140px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+img {
+    width: 115px;
+
+}
+
+#subtexto {
+    margin-top: -25px;
+}
+
+.botao {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    border: 2px solid;
+    border-radius: 5px; 
+    background-color: black;
+    color: #fff; 
+    text-decoration: none; 
+    cursor: pointer; 
+    transition: background-color 0.3s, color 0.3s; 
+    width: 200px;
+}
+
+
+.botao:hover {
+    background-color: rgba(0, 0, 0, 0.86);
+    color: #fff; 
+}
+
+.botao-delete {
+    text-decoration: none;
+    color: black;
+}
+
+.botao-delete:hover {
+    color: rgba(0, 0, 0, 0.86);
+}
+
+.botao-edit {
+    text-decoration: none;
+    color: black;
+}
+
+.botao-edit:hover {
+    color: rgba(0, 0, 0, 0.86);
+}
+
+#flexdirectionRow{
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+#div_grafico{
+    height: max-content;
+    width: max-content;
+    padding: 5px;
+    margin-left: 30px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.card_info{
+    height: 100px;
+    width: 610px;
+    border-radius: 5px;
+    background-color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 27px;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+#div_infoAjuste{
+    margin-top: 0px;
+}
+
+#botao_ajusteTamanho{
+    height: 60px;
+    width: 300px;
+    font-size: 20px;
+}
+
+#div_ajusteTamanho{
+    width: 50%;
+}
+
+.menuIdades{
+    height: max-content;
+    width: max-content;
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#DivAbaixoMedia, #DivAcimaMedia{
+    position: absolute;
+    z-index: -1;
+}
+
+#tamanhoMinTabelaIdadesMedias{
+    width: 45%;
+    height: max-content;
+    min-height: 600px;
+    justify-content: start;
+
+}
+
+#divConteudoIdadeMedia{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: max-content;
+    padding: 30px;
+    padding-right: 0px;
+    justify-content: center;
+
+}
+
+.cardIdadesMedias{
+    height: 100px;
+    width: 500px;
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    margin-left: 30px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.containerIdadesMedias{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    height: max-content;
+    background-color: white;
+    border-radius: 5px;
+    padding: 30px 30px 50px;
+}
+
+#divConteudoTabelasIMC{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 90%;
+    height: max-content;
+    gap: 20px;
+    padding-top: 50px;
+}
+
+.divTabelasIMC{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    text-align: center;
+    width: 45%;
+    height: max-content;
+    min-height: 450px;
+    padding: 20px;
+    border-radius: 5px;
+}
+
