@@ -6,7 +6,7 @@ function conectarBanco(): PDO
     $senha = "";
     $nomeBanco = "pessoasIMC";
 
-    $conexao = new PDO("mysql:host=".$localServidor.";dbname=".$nomeBanco, $usuario, $senha);
+    $conexao = new PDO("mysql:dbname=".$nomeBanco.";host=".$localServidor, $usuario, $senha);
     return $conexao;
 }
 
