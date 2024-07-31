@@ -1,12 +1,12 @@
 <?php
-function conectarBanco(): mysqli
+function conectarBanco(): PDO
 {
     $localServidor = "localhost";
     $usuario = "root";
     $senha = "";
     $nomeBanco = "pessoasIMC";
 
-    $conexao = mysqli_connect($localServidor, $usuario, $senha, $nomeBanco, 3307);
+    $conexao = new PDO("mysql:host=".$localServidor.";dbname=".$nomeBanco, $usuario, $senha);
     return $conexao;
 }
 
@@ -15,9 +15,14 @@ function insert(String $nome, String $sobrenome, int $idade, float $peso, float 
 {
     $conexao = conectarBanco();
     date_default_timezone_set("America/Sao_Paulo");
-    $comandoSQL = "insert into pessoas (nome, sobrenome, idade, peso, altura) values ('" . $nome . "','" . $sobrenome . "'," . $idade . "," . $peso . "," . $altura . ")";
-    $retornoBanco = mysqli_query($conexao, $comandoSQL) or die(mysqli_error($conexao));
-    mysqli_close($conexao);
+    $comandoSQL = "insert into pessoas (nome, sobrenome, idade, peso, altura) values (?, ?, ?, ?, ?)";
+    $stmt = $conexao->prepare($comandoSQL);
+    $stmt->bindParam(1, $nome, PDO::PARAM_STR);
+    $stmt->bindParam(2, $sobrenome, PDO::PARAM_STR);
+    $stmt->bindParam(3, $idade, PDO::PARAM_INT);
+    $stmt->bindParam(4, $peso, PDO::PARAM_INT);
+    $stmt->bindParam(5, $altura, PDO::PARAM_INT);
+    $stmt->execute();
     file_put_contents("../operacoes_bd.txt", file_get_contents("../operacoes_bd.txt") . "
 INSERT:" . "
 NOME: " . $nome . "
@@ -28,6 +33,7 @@ ALTURA: " . $altura . "
 QUERY: " . $comandoSQL . "
 DATA E HORA: " . $agora = date('d/m/Y H:i') . "
 ");
+    $stmt = null;
 }
 
 //DELETE
@@ -36,19 +42,28 @@ function delete(int $id): void
     $conexao = conectarBanco();
     date_default_timezone_set("America/Sao_Paulo");
     //SELECT PARA COLOCAR OS DADOS NA LOG
-    $comandoSQLConsulta = "select * from pessoas where id_pessoa=" . $id;
-    $retornoBancoConsulta = mysqli_query($conexao, $comandoSQLConsulta) or die(mysqli_error($conexao));
-    while ($row = mysqli_fetch_array($retornoBancoConsulta)) {
+    $comandoSQLConsulta = "select * from pessoas where id_pessoa = ?";
+    $stmt = $conexao->prepare($comandoSQLConsulta);
+    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    $listaPessoas = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    foreach ($listaPessoas as $row) {
         $nome = $row[1];
         $sobrenome = $row[2];
         $idade = $row[3];
         $peso = $row[4];
         $altura = $row[5];
     }
+
+    $stmt = null;
     //QUERY DO DELETE
-    $comandoSQL = "delete from pessoas where id_pessoa=" . $id;
-    $retornoBanco = mysqli_query($conexao, $comandoSQL) or die(mysqli_error($conexao));
-    mysqli_close($conexao);
+    $comandoSQL = "delete from pessoas where id_pessoa = ?";
+    $stmt = $conexao->prepare($comandoSQL);
+    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+    $stmt->execute();
     file_put_contents("../operacoes_bd.txt", file_get_contents("../operacoes_bd.txt") . "
 DELETE:" . "
 ID: " . $id . "
@@ -60,6 +75,7 @@ ALTURA: " . $altura . "
 QUERY: " . $comandoSQL . "
 DATA E HORA: " . $agora = date('d/m/Y H:i') . "
 ");
+    $stmt = null;
 }
 
 //UPDATE
