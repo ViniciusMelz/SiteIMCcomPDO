@@ -6,7 +6,7 @@ function conectarBanco(): PDO
     $senha = "";
     $nomeBanco = "pessoasIMC";
 
-    $conexao = new PDO("mysql:dbname=".$nomeBanco.";host=".$localServidor, $usuario, $senha);
+    $conexao = new PDO("mysql:dbname=" . $nomeBanco . ";host=" . $localServidor, $usuario, $senha);
     return $conexao;
 }
 
@@ -84,18 +84,33 @@ function update(int $id, String $nome, String $sobrenome, int $idade, float $pes
     $conexao = conectarBanco();
     date_default_timezone_set("America/Sao_Paulo");
     //SELECT PARA COLOCAR OS DADOS NA LOG
-    $comandoSQLConsulta = "select * from pessoas where id_pessoa=" . $id;
-    $retornoBancoConsulta = mysqli_query($conexao, $comandoSQLConsulta) or die(mysqli_error($conexao));
-    while ($row = mysqli_fetch_array($retornoBancoConsulta)) {
+    $comandoSQLConsulta = "select * from pessoas where id_pessoa = ?";
+    $stmt = $conexao->prepare($comandoSQLConsulta);
+    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+
+    $stmt->execute();
+
+    $listaPessoas = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    foreach ($listaPessoas as $row) {
         $nomeAntigo = $row[1];
         $sobrenomeAntigo = $row[2];
         $idadeAntigo = $row[3];
         $pesoAntigo = $row[4];
         $alturaAntigo = $row[5];
     }
-    $comandoSQL = "update pessoas set nome='" . $nome . "', sobrenome='" . $sobrenome . "', idade=" . $idade . ", peso=" . $peso . ", altura=" . $altura . " where id_pessoa=" . $id;
-    $retornoBanco = mysqli_query($conexao, $comandoSQL) or die(mysqli_error($conexao));
-    mysqli_close($conexao);
+
+    $stmt = null;
+    //QUERY DO UPDATE
+    $comandoSQL = "update pessoas set nome = ?, sobrenome = ?, idade = ?, peso = ?, altura = ? where id = ?";
+    $stmt = $conexao->prepare($comandoSQLConsulta);
+    $stmt->bindParam(1, $nome, PDO::PARAM_STR);
+    $stmt->bindParam(2, $sobrenome, PDO::PARAM_STR);
+    $stmt->bindParam(3, $idade, PDO::PARAM_INT);
+    $stmt->bindParam(4, $peso, PDO::PARAM_INT);
+    $stmt->bindParam(5, $altura, PDO::PARAM_INT);
+    $stmt->bindParam(6, $id, PDO::PARAM_INT);
+    $stmt->execute();
     file_put_contents("../operacoes_bd.txt", file_get_contents("../operacoes_bd.txt") . "
 UPDATE:" . "
 DADOS ANTIGOS:" . "
@@ -115,6 +130,7 @@ ALTURA: " . $altura . "
 QUERY: " . $comandoSQL . "
 DATA E HORA: " . $agora = date('d/m/Y H:i') . "
 ");
+    $stmt = null;
 }
 
 //SELECT
@@ -123,8 +139,11 @@ function select(): array
     $arrayAux = array();
     $conexao = conectarBanco();
     $comandoSQL = "select * from pessoas";
-    $retornoBanco = mysqli_query($conexao, $comandoSQL) or die(mysqli_error($conexao));
-    if (mysqli_num_rows($retornoBanco) > 0) {
+    $stmt = $conexao->prepare($comandoSQL);
+    $stmt->execute();
+    /*
+    
+    if (mysqli_num_rows($array) > 0) {
         while ($registro = mysqli_fetch_array($retornoBanco)) {
             $arrayAux[$registro['id_pessoa']] = array(
                 'nome' => $registro['nome'],
@@ -135,28 +154,45 @@ function select(): array
             );
         }
     }
+    */
+    $listaPessoas = $stmt->fetchAll(PDO::FETCH_OBJ);
+    foreach ($listaPessoas as $registro) {
+        $arrayAux[$registro['id_pessoa']] = array(
+            'nome' => $registro['nome'],
+            'sobrenome' => $registro['sobrenome'],
+            'idade' => $registro['idade'],
+            'peso' => $registro['peso'],
+            'altura' => $registro['altura']
+        );
+    }
+    $stmt = null;
     return $arrayAux;
+    
 }
 
 //Funções Peso
 //Pega o maior peso
-function maisPeso(mysqli $auxconexao): void
+function maisPeso(PDO $auxconexao): void
 {
     $comandoSQLPessoaMaisPeso = "SELECT peso FROM pessoas ORDER BY peso DESC LIMIT 1";
-    $retornoBancoMaisPeso = mysqli_query($auxconexao, $comandoSQLPessoaMaisPeso) or die(mysqli_error($auxconexao));
-    while ($row = mysqli_fetch_array($retornoBancoMaisPeso)) {
+    $stmt = $auxconexao->prepare($comandoSQLPessoaMaisPeso);
+    $stmt->execute();
+    while ($row = $stmt->fetchAll(PDO::FETCH_OBJ)) {
         echo "A pessoa mais pesada registrada tem " . number_format(round($row[0], 2), 2, ',', ' ') . " Kg";
     }
+    $stmt = null;
 }
 
 //Pega o menor peso
-function menorPeso(mysqli $auxconexao): void
+function menorPeso(PDO $auxconexao): void
 {
     $comandoSQLPessoaMaisLeve = "SELECT peso FROM pessoas ORDER BY peso LIMIT 1";
-    $retornoBancoMaisLeve = mysqli_query($auxconexao, $comandoSQLPessoaMaisLeve) or die(mysqli_error($auxconexao));
-    while ($row = mysqli_fetch_array($retornoBancoMaisLeve)) {
+    $stmt = $auxconexao->prepare($comandoSQLPessoaMaisLeve);
+    $stmt->execute();
+    while ($row = $stmt->fetchAll(PDO::FETCH_OBJ)) {
         echo "A pessoa mais leve registrada tem " . number_format(round($row[0], 2), 2, ',', ' ') . " Kg";
     }
+    $stmt = null;
 }
 
 function pesoMedio(mysqli $auxconexao): void
@@ -233,7 +269,8 @@ function mediaIdades(mysqli $conexao): void
     }
 }
 
-function quantidadeAcimaMedia(mysqli $conexao): int{
+function quantidadeAcimaMedia(mysqli $conexao): int
+{
     $comandoSQLQuantidade = "SELECT count(nome) FROM pessoas WHERE idade > (SELECT AVG(idade) FROM pessoas)";
     $retornoBancoQuantidade = mysqli_query($conexao, $comandoSQLQuantidade) or die(mysqli_error($conexao));
     while ($row = mysqli_fetch_array($retornoBancoQuantidade)) {
@@ -242,7 +279,8 @@ function quantidadeAcimaMedia(mysqli $conexao): int{
     return $quantidade;
 }
 
-function acimaMedia(mysqli $conexao): array{
+function acimaMedia(mysqli $conexao): array
+{
     $comandoSQLAcimaMedia = "SELECT concat(nome, ' ', sobrenome) AS nome, idade FROM pessoas WHERE idade > (SELECT AVG(idade) FROM pessoas) ORDER BY 2";
     $retornoBancoAcimaMedia = mysqli_query($conexao, $comandoSQLAcimaMedia) or die(mysqli_error($conexao));
     if (mysqli_num_rows($retornoBancoAcimaMedia) > 0) {
@@ -256,7 +294,8 @@ function acimaMedia(mysqli $conexao): array{
     return $arrayAux;
 }
 
-function quantidadeAbaixoMedia(mysqli $conexao): int{
+function quantidadeAbaixoMedia(mysqli $conexao): int
+{
     $comandoSQLAbaixoMedia = "SELECT COUNT(*) FROM pessoas WHERE idade < (SELECT AVG(idade) FROM pessoas)";
     $retornoBancoAbaixoMedia = mysqli_query($conexao, $comandoSQLAbaixoMedia) or die(mysqli_error($conexao));
     while ($row = mysqli_fetch_array($retornoBancoAbaixoMedia)) {
@@ -265,7 +304,8 @@ function quantidadeAbaixoMedia(mysqli $conexao): int{
     return $quantidade;
 }
 
-function abaixoMedia(mysqli $conexao): array{
+function abaixoMedia(mysqli $conexao): array
+{
     $comandoSQLAbaixoMedia = "SELECT concat(nome, ' ', sobrenome) AS nome, idade FROM pessoas WHERE idade < (SELECT AVG(idade) FROM pessoas) ORDER BY 2";
     $retornoBancoAbaixoMedia = mysqli_query($conexao, $comandoSQLAbaixoMedia) or die(mysqli_error($conexao));
     if (mysqli_num_rows($retornoBancoAbaixoMedia) > 0) {
@@ -279,7 +319,8 @@ function abaixoMedia(mysqli $conexao): array{
     return $arrayAux;
 }
 
-function imc3MaiorIdade(mysqli $conexao): array{
+function imc3MaiorIdade(mysqli $conexao): array
+{
     $comandoSQLIMC3MaiorIdade = "SELECT concat(nome, ' ', sobrenome) AS nome, calcular_imc(peso, altura) as imc, idade FROM pessoas ORDER BY idade DESC LIMIT 3";
     $retornoBancoIMC3MaiorIdade = mysqli_query($conexao, $comandoSQLIMC3MaiorIdade) or die(mysqli_error($conexao));
     if (mysqli_num_rows($retornoBancoIMC3MaiorIdade) > 0) {
@@ -294,7 +335,8 @@ function imc3MaiorIdade(mysqli $conexao): array{
     return $arrayAux;
 }
 
-function imc5MenorIdade(mysqli $conexao): array{
+function imc5MenorIdade(mysqli $conexao): array
+{
     $comandoSQLIMC5MenorIdade = "SELECT concat(nome, ' ', sobrenome) AS nome, calcular_imc(peso, altura) as imc, idade FROM pessoas ORDER BY idade LIMIT 5";
     $retornoBancoIMC5MenorIdade = mysqli_query($conexao, $comandoSQLIMC5MenorIdade) or die(mysqli_error($conexao));
     if (mysqli_num_rows($retornoBancoIMC5MenorIdade) > 0) {
