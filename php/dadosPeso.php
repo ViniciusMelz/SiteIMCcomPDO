@@ -26,7 +26,7 @@ $array = imcForaDoNormal($conexao);
                     <th>Peso<br>(Kg)</th>
                     <th>Classificação</th>
                 </tr>
-                <?php
+                <?
                 foreach ($array as $id => $dados) {
                     $contador = 0;
                     echo '<tr>';
@@ -48,17 +48,17 @@ $array = imcForaDoNormal($conexao);
         </div>
         <div>
             <div class="card_info" id="div_infoAjuste">
-                <?php
+                <?
                     pesoMedio($conexao);
                 ?>
             </div>
             <div class="card_info">
-                <?php
+                <?
                     menorPeso($conexao);
                 ?>
             </div>
             <div class="card_info">
-                <?php
+                <?
                     maisPeso($conexao);
                 ?>
             </div>

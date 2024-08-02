@@ -1,8 +1,6 @@
 <?php
 include "funcoesBanco.php";
 $conexao = conectarBanco();
-$array = nomeIMCs($conexao);
-
 ?>
 
 <!DOCTYPE html>
@@ -60,8 +58,9 @@ $array = nomeIMCs($conexao);
                     <th>IMC</th>
                     <th>Grau de<br>Obesidade</th>
                 </tr>
-                <?php
-                foreach ($array as $id => $dados) {
+                <?
+                $array = nomeIMCs($conexao);
+                foreach (nomeIMCs($conexao) as $id => $dados) {
                     $contador = 0;
                     echo '<tr>';
                     foreach ($dados as $caracteristicas => $valor) {

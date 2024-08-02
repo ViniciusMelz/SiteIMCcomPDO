@@ -33,7 +33,6 @@ ALTURA: " . $altura . "
 QUERY: " . $comandoSQL . "
 DATA E HORA: " . $agora = date('d/m/Y H:i') . "
 ");
-    $stmt = null;
 }
 
 //DELETE
@@ -51,14 +50,13 @@ function delete(int $id): void
     $listaPessoas = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     foreach ($listaPessoas as $row) {
-        $nome = $row[1];
-        $sobrenome = $row[2];
-        $idade = $row[3];
-        $peso = $row[4];
-        $altura = $row[5];
+        $nome = $row->nome;
+        $sobrenome = $row->sobrenome;
+        $idade = $row->idade;
+        $peso = $row->peso;
+        $altura = $row->altura;
     }
 
-    $stmt = null;
     //QUERY DO DELETE
     $comandoSQL = "delete from pessoas where id_pessoa = ?";
     $stmt = $conexao->prepare($comandoSQL);
@@ -75,7 +73,6 @@ ALTURA: " . $altura . "
 QUERY: " . $comandoSQL . "
 DATA E HORA: " . $agora = date('d/m/Y H:i') . "
 ");
-    $stmt = null;
 }
 
 //UPDATE
@@ -93,17 +90,16 @@ function update(int $id, String $nome, String $sobrenome, int $idade, float $pes
     $listaPessoas = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     foreach ($listaPessoas as $row) {
-        $nomeAntigo = $row[1];
-        $sobrenomeAntigo = $row[2];
-        $idadeAntigo = $row[3];
-        $pesoAntigo = $row[4];
-        $alturaAntigo = $row[5];
+        $nomeAntigo = $row->nome;
+        $sobrenomeAntigo = $row->sobrenome;
+        $idadeAntigo = $row->idade;
+        $pesoAntigo = $row->peso;
+        $alturaAntigo = $row->altura;
     }
 
-    $stmt = null;
     //QUERY DO UPDATE
-    $comandoSQL = "update pessoas set nome = ?, sobrenome = ?, idade = ?, peso = ?, altura = ? where id = ?";
-    $stmt = $conexao->prepare($comandoSQLConsulta);
+    $comandoSQL = "update pessoas set nome = ?, sobrenome = ?, idade = ?, peso = ?, altura = ? where id_pessoa = ?";
+    $stmt = $conexao->prepare($comandoSQL);
     $stmt->bindParam(1, $nome, PDO::PARAM_STR);
     $stmt->bindParam(2, $sobrenome, PDO::PARAM_STR);
     $stmt->bindParam(3, $idade, PDO::PARAM_INT);
@@ -141,20 +137,6 @@ function select(): array
     $comandoSQL = "select * from pessoas";
     $stmt = $conexao->prepare($comandoSQL);
     $stmt->execute();
-    /*
-    
-    if (mysqli_num_rows($array) > 0) {
-        while ($registro = mysqli_fetch_array($retornoBanco)) {
-            $arrayAux[$registro['id_pessoa']] = array(
-                'nome' => $registro['nome'],
-                'sobrenome' => $registro['sobrenome'],
-                'idade' => $registro['idade'],
-                'peso' => $registro['peso'],
-                'altura' => $registro['altura']
-            );
-        }
-    }
-    */
     $listaPessoas = $stmt->fetchAll(PDO::FETCH_OBJ);
     foreach ($listaPessoas as $registro) {
         $arrayAux[$registro->id_pessoa] = array(
@@ -165,7 +147,6 @@ function select(): array
             'altura' => $registro->altura
         );
     }
-    $stmt = null;
     return $arrayAux;
 }
 
@@ -179,7 +160,6 @@ function maisPeso(PDO $auxconexao): void
     while ($row = $stmt->fetchAll(PDO::FETCH_ASSOC)) {
         echo "A pessoa mais pesada registrada tem " . number_format(round($row[0], 2), 2, ',', ' ') . " Kg";
     }
-    $stmt = null;
 }
 
 //Pega o menor peso
@@ -198,9 +178,13 @@ function pesoMedio(PDO $auxconexao): void
 {
     $comandoSQLPesoMedio = "SELECT AVG(peso) FROM pessoas";
     $stmt = $auxconexao->prepare($comandoSQLPesoMedio);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "O peso médio geral é " . number_format(round($row[0], 2), 2, ',', ' ') . " Kg";
+    if ($row) {
+        echo "O peso médio geral é " . number_format($row['peso_medio'], 2, ',', ' ') . " Kg";
+    } else {
+        echo "Não foi possível calcular o peso médio.";
     }
 }
 
@@ -298,11 +282,7 @@ function mediaIdades(PDO $conexao): void
                 'idade' => $registro['idade']
             );
         }
-        $stmt = null;
-        $conexao = null;
         return $arrayAux;
-        
-
     }
 
     function quantidadeAbaixoMedia(PDO $conexao): int
@@ -339,15 +319,7 @@ function mediaIdades(PDO $conexao): void
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $arrayAux = [];
-        foreach ($result as $registro) {
-            $arrayAux[] = array(
-                'nome' => $registro['nome'],
-                'imc' => $registro['imc'],
-                'idade' => $registro['idade']
-            );
-        }
-        return $arrayAux;
+        return $result;
     }
 
     function imc5MenorIdade(PDO $conexao): array
@@ -356,7 +328,7 @@ function mediaIdades(PDO $conexao): void
         $stmt = $conexao->prepare($comandoSQLIMC5MenorIdade);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $arrayAux = [];
         foreach ($result as $registro) {
             $arrayAux[] = array(
@@ -369,17 +341,18 @@ function mediaIdades(PDO $conexao): void
     }
 
     //Funções IMC
-    function nomeIMCs(mysqli $conexao): array
+    function nomeIMCs(PDO $conexao): array
     {
         $comandoSQLNomeEIMC = "SELECT concat(nome, ' ', sobrenome) AS nome, calcular_imc(peso, altura) AS imc FROM pessoas ORDER BY 2";
-        $retornoBancoNomeEIMC = mysqli_query($conexao, $comandoSQLNomeEIMC) or die(mysqli_error($conexao));
-        if (mysqli_num_rows($retornoBancoNomeEIMC) > 0) {
-            while ($registro = mysqli_fetch_array($retornoBancoNomeEIMC)) {
-                $arrayAux[] = array(
-                    'nome' => $registro['nome'],
-                    'imc' => $registro['imc']
-                );
-            }
+        $stmt = $conexao->prepare($comandoSQLNomeEIMC);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $arrayAux = [];
+        foreach ($result as $registro) {
+            $arrayAux[] = [
+                'nome' => $registro['nome'],
+                'imc' => $registro['imc']
+            ];
         }
         return $arrayAux;
     }
@@ -407,66 +380,72 @@ function mediaIdades(PDO $conexao): void
         return $classificacao;
     }
 
-    function quantidadeAbaixoDoPeso(mysqli $conexao): int
+    function quantidadeAbaixoDoPeso(PDO $conexao): int
     {
         $comandoSQLQuantidadeAbaixoDoPeso = "SELECT count(calcular_imc(peso, altura)) AS qntIMC FROM pessoas WHERE calcular_imc(peso, altura) < 18.5";
-        $retornoBancoQuantidadeAbaixoDoPeso = mysqli_query($conexao, $comandoSQLQuantidadeAbaixoDoPeso) or die(mysqli_error($conexao));
-        while ($row = mysqli_fetch_array($retornoBancoQuantidadeAbaixoDoPeso)) {
-            return $row[0];
-        }
+        $stmt = $conexao->prepare($comandoSQLQuantidadeAbaixoDoPeso);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return (int) $row['qntIMC'];
     }
 
-    function quantidadeNormal(mysqli $conexao): int
+    function quantidadeNormal(PDO $conexao): int
     {
         $comandoSQLQuantidadeNormal = "SELECT count(calcular_imc(peso, altura)) AS qntIMC FROM pessoas WHERE calcular_imc(peso, altura) >= 18.5 AND calcular_imc(peso, altura) < 25";
-        $retornoBancoQuantidadeNormal = mysqli_query($conexao, $comandoSQLQuantidadeNormal) or die(mysqli_error($conexao));
-        while ($row = mysqli_fetch_array($retornoBancoQuantidadeNormal)) {
-            return $row[0];
-        }
+        $stmt = $conexao->prepare($comandoSQLQuantidadeNormal);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) $row['qntIMC'];
     }
 
-    function quantidadeSobrepeso(mysqli $conexao): int
+    function quantidadeSobrepeso(PDO $conexao): int
     {
         $comandoSQLQuantidadeSobrepeso = "SELECT count(calcular_imc(peso, altura)) AS qntIMC FROM pessoas WHERE calcular_imc(peso, altura) >= 25 AND calcular_imc(peso, altura) < 30";
-        $retornoBancoQuantidadeSobrepeso = mysqli_query($conexao, $comandoSQLQuantidadeSobrepeso) or die(mysqli_error($conexao));
-        while ($row = mysqli_fetch_array($retornoBancoQuantidadeSobrepeso)) {
-            return $row[0];
-        }
+        $stmt = $conexao->prepare($comandoSQLQuantidadeSobrepeso);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return (int) $row['qntIMC'];
     }
 
-    function quantidadeObesidadeGrau1(mysqli $conexao): int
+    function quantidadeObesidadeGrau1(PDO $conexao): int
     {
         $comandoSQLQuantidadeObesidadeGrau1 = "SELECT count(calcular_imc(peso, altura)) AS qntIMC FROM pessoas WHERE calcular_imc(peso, altura) >= 30 AND calcular_imc(peso, altura) < 35";
-        $retornoBancoQuantidadeObesidadeGrau1 = mysqli_query($conexao, $comandoSQLQuantidadeObesidadeGrau1) or die(mysqli_error($conexao));
-        while ($row = mysqli_fetch_array($retornoBancoQuantidadeObesidadeGrau1)) {
-            return $row[0];
-        }
+        $stmt = $conexao->prepare($comandoSQLQuantidadeObesidadeGrau1);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return (int) $row['qntIMC'];
     }
 
-    function quantidadeObesidadeGrau2(mysqli $conexao): int
+    function quantidadeObesidadeGrau2(PDO $conexao): int
     {
         $comandoSQLQuantidadeObesidadeGrau2 = "SELECT count(calcular_imc(peso, altura)) AS qntIMC FROM pessoas WHERE calcular_imc(peso, altura) >= 35 AND calcular_imc(peso, altura) < 40";
-        $retornoBancoQuantidadeObesidadeGrau2 = mysqli_query($conexao, $comandoSQLQuantidadeObesidadeGrau2) or die(mysqli_error($conexao));
-        while ($row = mysqli_fetch_array($retornoBancoQuantidadeObesidadeGrau2)) {
-            return $row[0];
-        }
+        $stmt = $conexao->prepare($comandoSQLQuantidadeObesidadeGrau2);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return (int) $row['qntIMC'];
     }
 
-    function quantidadeObesidadeGrau3(mysqli $conexao): int
+    function quantidadeObesidadeGrau3(PDO $conexao): int
     {
         $comandoSQLQuantidadeObesidadeGrau3 = "SELECT count(calcular_imc(peso, altura)) AS qntIMC FROM pessoas WHERE calcular_imc(peso, altura) >= 40";
-        $retornoBancoQuantidadeObesidadeGrau3 = mysqli_query($conexao, $comandoSQLQuantidadeObesidadeGrau3) or die(mysqli_error($conexao));
-        while ($row = mysqli_fetch_array($retornoBancoQuantidadeObesidadeGrau3)) {
-            return $row[0];
-        }
+        $stmt = $conexao->prepare($comandoSQLQuantidadeObesidadeGrau3);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return (int) $row['qntIMC'];
     }
 
-    function mediaIMC(mysqli $conexao): float
+    function mediaIMC(PDO $conexao): float
     {
         $comandoSQLMediaIMC = "SELECT avg(calcular_imc(peso, altura)) AS IMCMedio FROM pessoas";
-        $retornoBancoMediaIMC = mysqli_query($conexao, $comandoSQLMediaIMC) or die(mysqli_error($conexao));
-        while ($row = mysqli_fetch_array($retornoBancoMediaIMC)) {
-            return $row[0];
-        }
+        $stmt = $conexao->prepare($comandoSQLMediaIMC);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return (float) $row['IMCMedio'];
     }
 }

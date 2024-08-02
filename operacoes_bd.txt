@@ -81,3 +81,97 @@ PESO: 79.00
 ALTURA: 1.91
 QUERY: delete from pessoas where id_pessoa=16
 DATA E HORA: 17/06/2024 15:05
+
+INSERT:
+NOME: teste
+SOBRENOME: teste
+IDADE: 1
+PESO: 1
+ALTURA: 1
+QUERY: insert into pessoas (nome, sobrenome, idade, peso, altura) values (?, ?, ?, ?, ?)
+DATA E HORA: 02/08/2024 17:48
+
+DELETE:
+ID: 16
+NOME: teste
+SOBRENOME: teste
+IDADE: 1
+PESO: 1.00
+ALTURA: 1.00
+QUERY: delete from pessoas where id_pessoa = ?
+DATA E HORA: 02/08/2024 17:51
+
+DELETE:
+ID: 15
+NOME: Thiago
+SOBRENOME: Thiguense
+IDADE: 34
+PESO: 86.00
+ALTURA: 1.89
+QUERY: delete from pessoas where id_pessoa = ?
+DATA E HORA: 02/08/2024 17:51
+
+UPDATE:
+DADOS ANTIGOS:
+ID ANTIGO: 14
+NOME ANTIGO: Yoake
+SOBRENOME ANTIGO: Kinada
+IDADE ANTIGO: 115
+PESO ANTIGO: 84.00
+ALTURA ANTIGO: 1.77
+DADOS ATUALIZADOS:
+ID: 14
+NOME: Yoake
+SOBRENOME: Kinada
+IDADE: 115
+PESO: 84
+ALTURA: 1.77
+QUERY: update pessoas set nome = ?, sobrenome = ?, idade = ?, peso = ?, altura = ? where id_pessoa = ?
+DATA E HORA: 02/08/2024 17:59
+
+UPDATE:
+DADOS ANTIGOS:
+ID ANTIGO: 14
+NOME ANTIGO: Yoake
+SOBRENOME ANTIGO: Kinada
+IDADE ANTIGO: 115
+PESO ANTIGO: 84.00
+ALTURA ANTIGO: 1.00
+DADOS ATUALIZADOS:
+ID: 14
+NOME: azul
+SOBRENOME: Kinada
+IDADE: 115
+PESO: 84
+ALTURA: 1
+QUERY: update pessoas set nome = ?, sobrenome = ?, idade = ?, peso = ?, altura = ? where id_pessoa = ?
+DATA E HORA: 02/08/2024 17:59
+
+DELETE:
+ID: 14
+NOME: azul
+SOBRENOME: Kinada
+IDADE: 115
+PESO: 84.00
+ALTURA: 1.00
+QUERY: delete from pessoas where id_pessoa = ?
+DATA E HORA: 02/08/2024 17:59
+
+INSERT:
+NOME: aaa
+SOBRENOME: aaa
+IDADE: 4
+PESO: 5
+ALTURA: 2.05
+QUERY: insert into pessoas (nome, sobrenome, idade, peso, altura) values (?, ?, ?, ?, ?)
+DATA E HORA: 02/08/2024 17:59
+
+DELETE:
+ID: 17
+NOME: aaa
+SOBRENOME: aaa
+IDADE: 4
+PESO: 5.00
+ALTURA: 2.00
+QUERY: delete from pessoas where id_pessoa = ?
+DATA E HORA: 02/08/2024 18:00

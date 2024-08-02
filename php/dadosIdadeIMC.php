@@ -1,8 +1,6 @@
 <?php
-require "funcoesBanco.php";
+include "funcoesBanco.php";
 $conexao = conectarBanco();
-
-
 ?>
 
 <!DOCTYPE html>
@@ -37,7 +35,7 @@ $conexao = conectarBanco();
                         <th>IMC</th>
                         <th>Idade</th>
                     </tr>
-                    <?php
+                    <?
                     $arrayMaiorIdade = imc3MaiorIdade($conexao);
                     foreach ($arrayMaiorIdade as $id => $dados) {
                         $contador = 0;
@@ -45,12 +43,12 @@ $conexao = conectarBanco();
                         foreach ($dados as $caracteristicas => $valor) {
                             if ($contador == 0) {
                                 $nome = $valor;
-                                echo '<td>' . ucwords($nome) . '</td>';
+                                echo '<td>'.ucwords($nome) . '</td>';
                             } else if ($contador == 1) {
                                 $imc = $valor;
-                                echo '<td>' . number_format($valor, 2, ',', '') . '</td>';
+                                echo '<td>'.number_format($valor, 2, ',', '') . '</td>';
                             } else {
-                                echo '<td>' . $valor . '</td>';
+                                echo '<td>'.$valor.'</td>';
                             }
                             ++$contador;
                         }
@@ -67,7 +65,7 @@ $conexao = conectarBanco();
                         <th>IMC</th>
                         <th>Idade</th>
                     </tr>
-                    <?php
+                    <?
                     $arrayMenorIdade = imc5MenorIdade($conexao);
                     foreach ($arrayMenorIdade as $id => $dados) {
                         $contador = 0;
