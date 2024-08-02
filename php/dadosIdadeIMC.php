@@ -1,8 +1,8 @@
 <?php
-include "funcoesBanco.php";
+require "funcoesBanco.php";
 $conexao = conectarBanco();
-$arrayMaiorIdade = imc3MaiorIdade($conexao);
-$arrayMenorIdade = imc5MenorIdade($conexao);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +38,7 @@ $arrayMenorIdade = imc5MenorIdade($conexao);
                         <th>Idade</th>
                     </tr>
                     <?php
+                    $arrayMaiorIdade = imc3MaiorIdade($conexao);
                     foreach ($arrayMaiorIdade as $id => $dados) {
                         $contador = 0;
                         echo '<tr>';
@@ -48,7 +49,7 @@ $arrayMenorIdade = imc5MenorIdade($conexao);
                             } else if ($contador == 1) {
                                 $imc = $valor;
                                 echo '<td>' . number_format($valor, 2, ',', '') . '</td>';
-                            }else{
+                            } else {
                                 echo '<td>' . $valor . '</td>';
                             }
                             ++$contador;
@@ -67,6 +68,7 @@ $arrayMenorIdade = imc5MenorIdade($conexao);
                         <th>Idade</th>
                     </tr>
                     <?php
+                    $arrayMenorIdade = imc5MenorIdade($conexao);
                     foreach ($arrayMenorIdade as $id => $dados) {
                         $contador = 0;
                         echo '<tr>';
@@ -77,7 +79,7 @@ $arrayMenorIdade = imc5MenorIdade($conexao);
                             } else if ($contador == 1) {
                                 $imc = $valor;
                                 echo '<td>' . number_format($valor, 2, ',', '') . '</td>';
-                            }else{
+                            } else {
                                 echo '<td>' . $valor . '</td>';
                             }
                             ++$contador;

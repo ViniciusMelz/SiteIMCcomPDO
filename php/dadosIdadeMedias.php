@@ -1,8 +1,8 @@
 <?php
-include "funcoesBanco.php";
+require "funcoesBanco.php";
 $conexao = conectarBanco();
-$arrayAcimaMedia = acimaMedia($conexao);
-$arrayAbaixoMedia = abaixoMedia($conexao);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +39,7 @@ $arrayAbaixoMedia = abaixoMedia($conexao);
                             <th>Idade</th>
                         </tr>
                         <?php
+                        $arrayAbaixoMedia = abaixoMedia($conexao);
                         foreach ($arrayAbaixoMedia as $id => $dados) {
                             $contador = 0;
                             echo '<tr>';
@@ -64,6 +65,7 @@ $arrayAbaixoMedia = abaixoMedia($conexao);
                             <th>Idade</th>
                         </tr>
                         <?php
+                        $arrayAcimaMedia = acimaMedia($conexao);
                         foreach ($arrayAcimaMedia as $id => $dados) {
                             $contador = 0;
                             echo '<tr>';
