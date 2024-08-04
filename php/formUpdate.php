@@ -32,7 +32,7 @@
             <label>Idade:</label>
             <input type="number" name="containerIdade" required value="<?php echo $idade?>">
             <label>Peso:</label>
-            <input type="number" name="containerPeso" required value="<?php echo $peso?>">
+            <input type="number" name="containerPeso" step="0.01" required value="<?php echo $peso?>">
             <label>Altura:</label>
             <input type="number" name="containerAltura" step="0.01" required value="<?php echo $altura?>">
             <input type="submit" value="Atualizar Dados">
