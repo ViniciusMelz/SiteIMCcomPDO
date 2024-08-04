@@ -65,7 +65,7 @@ $conexao = conectarBanco();
                         <th>IMC</th>
                         <th>Idade</th>
                     </tr>
-                    <?
+                    <?php
                     $arrayMenorIdade = imc5MenorIdade($conexao);
                     foreach ($arrayMenorIdade as $id => $dados) {
                         $contador = 0;
