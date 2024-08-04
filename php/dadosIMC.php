@@ -58,7 +58,7 @@ $conexao = conectarBanco();
                     <th>IMC</th>
                     <th>Grau de<br>Obesidade</th>
                 </tr>
-                <?
+                <?php
                 $array = nomeIMCs($conexao);
                 foreach (nomeIMCs($conexao) as $id => $dados) {
                     $contador = 0;
